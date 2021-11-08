@@ -2,7 +2,7 @@ grammar MATLAB;
 
 @lexer::members
 {
-	boolean maybeString = false;
+maybeString = False;
 }
 
 //// LEXER RULES
@@ -15,7 +15,7 @@ BLOCKCOMMENT	: '%{' .*?  '%}' -> channel(HIDDEN);
 COMMENT			: '%' .*? NL  -> channel(HIDDEN);
 
 // Match whitespace characters and skip
-WS : [ \t] { maybeString = true; } -> skip;
+WS : [ \t] { self.maybeString = True; } -> skip;
 
 // Match the multiline break and skip it
 ELLIPSIS: '...' -> skip;
@@ -54,7 +54,7 @@ ELMENT_WISE_POWER			: '.^';
 ELMENT_WISE_RIGHT_DIVIDE	: '.\\';
 ELMENT_WISE_TIMES			: '.*';
 ELMENT_WISE_TRANSPOSE		: '.\'';
-EQUALS						: '==' {maybeString = true;};
+EQUALS						: '==' {self.maybeString = True;};
 GREATER_THAN_OR_EQUAL		: '>=';
 LESS_THAN_OR_EQUAL			: '<=';
 LOGICAL_AND					: '&&';
@@ -62,13 +62,13 @@ LOGICAL_OR					: '||';
 NOT_EQUAL					: '~=';
 
 // Single Character Operators
-ASSIGN			: '=' { maybeString = true; };
+ASSIGN			: '=' { self.maybeString = True; };
 BINARY_AND		: '&';
 BINARY_OR		: '|';
 COLON			: ':';
-GREATER_THAN	: '>' { maybeString = true; };
+GREATER_THAN	: '>' { self.maybeString = True; };
 LEFT_DIVIDE		: '/';
-LESS_THAN		: '<' { maybeString = true; };
+LESS_THAN		: '<' { self.maybeString = True; };
 MINUS			: '-';
 NOT				: '~';
 PLUS			: '+';
@@ -79,19 +79,19 @@ TRANSPOSE		: '\'';
 
 // Special Characters
 AT						: '@';
-COMMA					: ',' {maybeString = true;};
+COMMA					: ',' {self.maybeString = True;};
 DOT						: '.';
-SEMI_COLON				: ';' {maybeString = true;};
-LEFT_BRACE				: '{' {maybeString = true;};
-LEFT_PARENTHESIS		: '(' {maybeString = true;};
-LEFT_SQUARE_BRACKET		: '[' {maybeString = true;};
+SEMI_COLON				: ';' {self.maybeString = True;};
+LEFT_BRACE				: '{' {self.maybeString = True;};
+LEFT_PARENTHESIS		: '(' {self.maybeString = True;};
+LEFT_SQUARE_BRACKET		: '[' {self.maybeString = True;};
 QUESTION				: '?';
-RIGHT_BRACE				: '}' {maybeString = false;};
-RIGHT_PARENTHESIS		: ')' {maybeString = false;};
-RIGHT_SQUARE_BRACKET	: ']' {maybeString = false;};
+RIGHT_BRACE				: '}' {self.maybeString = False;};
+RIGHT_PARENTHESIS		: ')' {self.maybeString = False;};
+RIGHT_SQUARE_BRACKET	: ']' {self.maybeString = False;};
 
 // Atoms - identifiers, strings, numbers, whitespace
-ID: [a-zA-Z] [a-zA-Z0-9_]* { maybeString = false; };
+ID: [a-zA-Z] [a-zA-Z0-9_]* { self.maybeString = False; };
 
 IMAGINARY
 :	INT 'i'
@@ -112,7 +112,7 @@ EXPONENT: ('e'|'E') ('+'|'-')? DIGIT+;
 fragment
 DIGIT: [0-9];
 
-STRING : {maybeString}? '\'' ( ~('\'' | '\r' | '\n') | '\'\'')* '\'';
+STRING : {self.maybeString}? '\'' ( ~('\'' | '\r' | '\n') | '\'\'')* '\'';
 
 
 //// Parser Rules ////
